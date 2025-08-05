@@ -5,9 +5,9 @@ import Button from "./Button";
 const Header = () => {
   return (
     <header className="flex items-center justify-between p-5 bg-black">
-      <Logo />
+      <Logo to="/" />
       <div className="login_btn">
-        <Button>Login</Button>
+        <Button to="/login">Login</Button>
       </div>
     </header>
   );

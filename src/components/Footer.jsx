@@ -4,7 +4,7 @@ import Logo from "./Logo";
 const Footer = () => {
   return (
     <section className="footer bg-black flex items-center justify-between p-5">
-      <Logo />
+      <Logo to="/" />
       <div className="author text-white text-2xl">Created By Santhakumar</div>
     </section>
   );
