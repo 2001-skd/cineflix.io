@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import Input from "./Input";
 import Layout from "./Layout";
+import { auth } from "../firebase/firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useRef, useState } from "react";
 import { validateForm } from "../utils/validate";
 
@@ -11,16 +13,37 @@ const SignUp = () => {
   const password = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  function handleSignUpSubmit() {
+  async function handleSignUpSubmit() {
     const message = validateForm(email.current.value, password.current.value);
-    // console.log(errorMessage);
     setErrorMessage(message);
+    if (message) return;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      );
+
+      await updateProfile(userCredential.user, {
+        displayName: name.current.value,
+      });
+
+      setErrorMessage("Registered Successfully!");
+      name.current.value = "";
+      email.current.value = "";
+      password.current.value = "";
+      console.log(userCredential);
+    } catch (error) {
+      setErrorMessage(`${error.code} ${error.message}`);
+    }
   }
+
   return (
     <Layout>
       <section className="relative">
         <div className="bg_image">
-          <img src="../../public/images/img" alt="bg_image" />
+          <img src="images/img/bg_image.jpg" alt="bg_image" />
           <div className="bg_overlay absolute top-0 left-0 bg-black w-full h-full opacity-75 overflow-hidden"></div>
         </div>
 
@@ -32,6 +55,7 @@ const SignUp = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              handleSignUpSubmit();
             }}
           >
             <div className="flex items-center flex-col gap-3">
