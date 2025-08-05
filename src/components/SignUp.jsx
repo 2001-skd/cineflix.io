@@ -2,13 +2,25 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import Input from "./Input";
 import Layout from "./Layout";
+import { useRef, useState } from "react";
+import { validateForm } from "../utils/validate";
 
 const SignUp = () => {
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function handleSignUpSubmit() {
+    const message = validateForm(email.current.value, password.current.value);
+    // console.log(errorMessage);
+    setErrorMessage(message);
+  }
   return (
     <Layout>
       <section className="relative">
         <div className="bg_image">
-          <img src="../src/assets/img/bg_image.jpg" alt="bg_image" />
+          <img src="../../public/images/img" alt="bg_image" />
           <div className="bg_overlay absolute top-0 left-0 bg-black w-full h-full opacity-75 overflow-hidden"></div>
         </div>
 
@@ -17,13 +29,28 @@ const SignUp = () => {
           <h5 className="font-extrabold tracking-wider text-white text-2xl my-2">
             Sign Up
           </h5>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <div className="flex items-center flex-col gap-3">
-              <Input type="text" placeholder="Enter Your Name" />
-              <Input type="email" placeholder="Enter Your Email" />
-              <Input type="password" placeholder="Enter Your Password" />
+              <Input type="text" placeholder="Enter Your Name" ref={name} />
+              <Input type="email" placeholder="Enter Your Email" ref={email} />
+              <Input
+                type="password"
+                placeholder="Enter Your Password"
+                ref={password}
+              />
             </div>
-            <Button extraClassName="my-3">Sign Up</Button>
+            <p className="text-red-500 font-bold">{errorMessage}</p>
+            <Button
+              extraClassName="my-3"
+              type="submit"
+              onClick={handleSignUpSubmit}
+            >
+              Sign Up
+            </Button>
           </form>
 
           <p className="text-white text-center">

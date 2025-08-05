@@ -2,13 +2,24 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import Input from "./Input";
 import Layout from "./Layout";
+import { useRef, useState } from "react";
+import { validateForm } from "../utils/validate";
 
 const Login = () => {
+  const emailId = useRef(null);
+  const password = useRef(null);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  function handleLoginSubmit() {
+    console.log(emailId, password);
+    const message = validateForm(emailId.current.value, password.current.value);
+    setErrorMessage(message);
+  }
   return (
     <Layout>
       <section className="relative">
         <div className="bg_image">
-          <img src="../src/assets/img/bg_image.jpg" alt="bg_image" />
+          <img src="../../public/images/img" alt="bg_image" />
           <div className="bg_overlay absolute top-0 left-0 bg-black w-full h-full opacity-75 overflow-hidden"></div>
         </div>
 
@@ -17,12 +28,31 @@ const Login = () => {
           <h5 className="font-extrabold tracking-wider text-white text-2xl my-2">
             Login
           </h5>
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
             <div className="flex items-center flex-col gap-3">
-              <Input type="email" placeholder="Enter Your Email" />
-              <Input type="password" placeholder="Enter Your Password" />
+              <Input
+                type="email"
+                placeholder="Enter Your Email"
+                ref={emailId}
+              />
+              <Input
+                type="password"
+                placeholder="Enter Your Password"
+                ref={password}
+              />
             </div>
-            <Button extraClassName="my-3">Login</Button>
+            <p className="text-red-500 font-bold">{errorMessage}</p>
+            <Button
+              extraClassName="my-3"
+              type="submit"
+              onClick={handleLoginSubmit}
+            >
+              Login
+            </Button>
           </form>
 
           <p className="text-white text-center">

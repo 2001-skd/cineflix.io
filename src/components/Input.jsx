@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Input = ({ type = "text", placeholder, value, onChange }) => {
+const Input = ({ type = "text", placeholder, value, onChange, ref }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   function handleTogglePwd() {
@@ -17,6 +17,7 @@ const Input = ({ type = "text", placeholder, value, onChange }) => {
         className="w-full rounded-sm p-3 flex items-center justify-center"
         value={value}
         onChange={onChange}
+        ref={ref}
       />
       {type === "password" && (
         <i className="cursor-pointer" onClick={handleTogglePwd}>
