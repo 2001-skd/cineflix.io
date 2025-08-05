@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Button from "./Button";
 import Input from "./Input";
 import Layout from "./Layout";
@@ -6,11 +6,14 @@ import { useRef, useState } from "react";
 import { validateForm } from "../utils/validate";
 import { auth } from "../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { addUser } from "../utils/store/UserSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const emailId = useRef(null);
   const password = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   function handleLoginSubmit() {
     console.log(emailId, password);
@@ -28,11 +31,13 @@ const Login = () => {
         // Signed in
         const user = userCredential.user;
         setErrorMessage("Login Successfully !");
+        navigate("/browse");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         setErrorMessage(`${errorCode} ${errorMessage}`);
+        navigate("/");
       });
   }
   return (
